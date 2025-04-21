@@ -1,0 +1,3 @@
+[submodule "voice_foundry/lib/openzeppelin-contracts"]
+	path = voice_foundry/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
