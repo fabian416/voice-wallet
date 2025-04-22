@@ -1,4 +1,4 @@
-use dep::std::hash::poseidon_hash;
+mod utils;
 
 fn main(
     voice_embedding: [Field; 256],
@@ -6,10 +6,10 @@ fn main(
     voice_commitment: pub Field,
     expected_command_hash: pub Field,
 ) {
-    // Validar que el usuario conoce el embedding original
-    let calculated_commitment = poseidon::hash(voice_embedding);
+    // Validate that the use rknows his voice embedding
+    let calculated_commitment = utils::hash_embedding(voice_embedding);
     assert(calculated_commitment == voice_commitment);
 
-    // Validar que el comando enviado es el autorizado
+    // Validate that the sent command is authorized
     assert(command_hash == expected_command_hash);
 }
