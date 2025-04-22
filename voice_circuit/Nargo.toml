@@ -1,7 +1,5 @@
 [package]
 name = "voice_circuit"
-type = "bin"
-authors = [""]
-
-[dependencies]
-std = { tag = "latest" }
+version = "0.1.0"
+edition = "2023_10"
+type = "bin"           # solo para que deje de quejarse
