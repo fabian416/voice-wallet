@@ -1,0 +1,29 @@
+venv/
+.env/
+
+# 🧪 Archivos compilados / caché
+__pycache__/
+*.py[cod]
+*.so
+
+# 📦 Archivos generados
+*.npy
+*.npz
+*.txt
+*.json
+*.csv
+*.log
+
+# 🎧 Audios temporales
+*.wav
+*.mp3
+*.m4a
+
+# 💻 Configs locales de VS Code u otros editores
+.vscode/
+.idea/
+
+# 🧪 Archivos temporales o backup
+*.bak
+*.swp
+.DS_Store
