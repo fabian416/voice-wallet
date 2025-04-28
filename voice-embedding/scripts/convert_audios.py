@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-AUDIO_DIR = "../audios"
+AUDIO_DIR = "./audios"
 
 for filename in os.listdir(AUDIO_DIR):
     if filename.endswith(".mp4") or filename.endswith(".m4a") or filename.endswith(".mov"):
@@ -15,4 +15,4 @@ for filename in os.listdir(AUDIO_DIR):
         ]
         
         subprocess.run(cmd)
-        print(f"✅ Converted {filename} to .wav")
+        print(f"Converted {filename} to .wav")

@@ -1,7 +1,7 @@
 import os
 import numpy as np
 
-EMBEDDING_DIR = "../embeddings"
+EMBEDDING_DIR = "./embeddings"
 
 embedding1 = np.load(os.path.join(EMBEDDING_DIR, "audio1.npy"))
 embedding2 = np.load(os.path.join(EMBEDDING_DIR, "audio2.npy"))

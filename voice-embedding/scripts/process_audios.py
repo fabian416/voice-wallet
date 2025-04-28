@@ -4,8 +4,8 @@ from resemblyzer import VoiceEncoder, preprocess_wav
 
 encoder = VoiceEncoder()
 
-AUDIO_DIR = "../audios"
-EMBEDDING_DIR = "../embeddings"
+AUDIO_DIR = "./audios"
+EMBEDDING_DIR = "./embeddings"
 
 os.makedirs(EMBEDDING_DIR, exist_ok=True)
 
