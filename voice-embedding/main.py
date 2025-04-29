@@ -1,11 +1,12 @@
-# main.py
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from resemblyzer import VoiceEncoder, preprocess_wav
 import numpy as np
 import os
 import subprocess
 
 app = Flask(__name__)
+CORS(app)
 encoder = VoiceEncoder()
 
 def compute_voice_commitment(embedding):
