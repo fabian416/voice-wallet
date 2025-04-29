@@ -1,33 +1,58 @@
-from fastapi import FastAPI, File, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
+# main.py
+from flask import Flask, request, jsonify
 from resemblyzer import VoiceEncoder, preprocess_wav
 import numpy as np
-import tempfile
-from pydub import AudioSegment
+import os
+import subprocess
 
-app = FastAPI()
-
-# Habilita CORS para permitir requests del frontend
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # en producción poné tu dominio frontend
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
+app = Flask(__name__)
 encoder = VoiceEncoder()
 
-@app.post("/process")
-async def process_voice(file: UploadFile = File(...)):
-    with tempfile.NamedTemporaryFile(suffix=".webm", delete=False) as temp_webm:
-        temp_webm.write(await file.read())
-        temp_webm.flush()
-        # Convertimos de webm a wav (pydub requiere ffmpeg instalado)
-        audio = AudioSegment.from_file(temp_webm.name)
-        wav_path = temp_webm.name.replace(".webm", ".wav")
-        audio.export(wav_path, format="wav")
+def compute_voice_commitment(embedding):
+    # Scale float embedding to field-like integers (simulate Noir inputs)
+    field_embedding = [int(val * 10**6) for val in embedding]
+    return field_embedding
 
-    wav = preprocess_wav(wav_path)
+@app.route("/register", methods=["POST"])
+def register_voice():
+    file = request.files["audio"]
+    path = "./audios/voice_register.wav"
+    file.save(path)
+
+    wav = preprocess_wav(path)
     embedding = encoder.embed_utterance(wav)
-    return { "embedding": embedding.tolist() }
+    field_embedding = compute_voice_commitment(embedding)
+
+    # Save embedding to file for witness input
+    with open("Prover.toml", "w") as f:
+        f.write(f'voice_embedding = [{", ".join(map(str, field_embedding))}]\n')
+
+    # Run nargo execute to compute commitment from embedding
+    subprocess.run(["nargo", "execute"], check=True)
+
+    # Read calculated commitment from witness or print
+    # Alternatively, return it directly for frontend to send on-chain
+    return jsonify({"status": "success", "message": "Voice registered"}), 200
+
+@app.route("/verify", methods=["POST"])
+def verify_voice():
+    file = request.files["audio"]
+    path = "./audios/voice_verify.wav"
+    file.save(path)
+
+    wav = preprocess_wav(path)
+    embedding = encoder.embed_utterance(wav)
+    field_embedding = compute_voice_commitment(embedding)
+
+    with open("Prover.toml", "w") as f:
+        f.write(f'voice_embedding = [{", ".join(map(str, field_embedding))}]\n')
+
+    subprocess.run(["nargo", "execute"], check=True)
+    subprocess.run([
+        "bb", "prove", "-b", "./target/voice_circuit.json", "-w", "./target/voice_circuit.gz", "-o", "./target"
+    ], check=True)
+
+    return jsonify({"status": "proof generated", "proof_path": "./target/proof"}), 200
+
+if __name__ == "__main__":
+    app.run(debug=True)
