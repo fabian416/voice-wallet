@@ -9,7 +9,6 @@ __pycache__/
 # 📦 Archivos generados
 *.npy
 *.npz
-*.txt
 *.json
 *.csv
 *.log
