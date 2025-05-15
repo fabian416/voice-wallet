@@ -15,7 +15,6 @@ export type GetAccountResponse = {
 export type CreateAccountPayload = {
   name: string;
   id: string;
-  kid: string;
 };
 
 @Injectable()
@@ -25,6 +24,7 @@ export class AccountService {
     baseURL: 'https://studio-api.cheqd.net',
     headers: {
       'x-api-key': process.env.CHEQD_API_KEY!,
+      'Authorization': `Bearer ${process.env.CHEQD_ID_TOKEN!}`,
       'Content-Type': 'application/json',
     },
   });
@@ -36,23 +36,6 @@ export class AccountService {
       return data;
     } catch (error: any) {
       this.handleError(error, 'getAccount');
-    }
-  }
-
-  async createAccount({ name, id, kid }: CreateAccountPayload): Promise<any> {
-    this.logger.log(`➡️ Sending account creation with: name=${name}, id=${id}, kid=${kid}`);
-
-    
-    try {
-      const { data } = await this.cheqdApi.post('/account/create', {
-        name,
-        primaryEmail: id,
-        ...(kid ? { kid } : {}),
-      });
-      this.logger.log(`✅ Account created: ${JSON.stringify(data)}`);
-      return data;
-    } catch (error: any) {
-      this.handleError(error, 'createAccount');
     }
   }
 

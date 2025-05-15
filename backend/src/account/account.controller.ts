@@ -9,9 +9,4 @@ export class AccountController {
   getAccount() {
     return this.accountService.getAccount();
   }
-
-  @Post()
-  createAccount(@Body() body: CreateAccountPayload) {
-    return this.accountService.createAccount(body);
-  }
 }

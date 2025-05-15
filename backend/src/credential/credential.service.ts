@@ -44,4 +44,35 @@ export class CredentialService {
       }
     }
   }
+
+
+  async verifyCredential(jwt: string): Promise<any> {
+    console.log({jwt});
+    try {
+      const { data } = await this.cheqdApi.post('/credential/verify', {
+        credential: jwt,
+        policies: {
+          issuanceDate: true,
+          expirationDate: true,
+          audience: false,
+        },
+      });
+
+      this.logger.log(`🟢 VC verificada correctamente`);
+      return data;
+    } catch (error: any) {
+      if (error.response) {
+        this.logger.error(`❌ verifyCredential: ${JSON.stringify(error.response.data)}`);
+        this.logger.error(`❌ Status: ${error.response.status}`);
+        throw new Error(`Verification failed: ${JSON.stringify(error.response.data)}`);
+      } else if (error.request) {
+        this.logger.error('❌ verifyCredential: No response received', error.request);
+        throw new Error('Verification failed: no response received');
+      } else {
+        this.logger.error(`❌ verifyCredential: ${error.message}`);
+        throw new Error(`Verification failed: ${error.message}`);
+      }
+    }
+
+  }
 }

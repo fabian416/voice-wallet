@@ -10,4 +10,9 @@ export class CredentialController {
   createCredential(@Body() payload: CreateCredentialPayload) {
     return this.credentialService.createCredential(payload);
   }
+
+  @Post('verify')
+  verifyCredential(@Body() payload: {jwt: string}) {
+    return this.credentialService.verifyCredential(payload.jwt);
+  }
 }
