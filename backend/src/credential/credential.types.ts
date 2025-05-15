@@ -1,8 +1,9 @@
 export interface CreateCredentialPayload {
-    issuerDid: string;
     subjectDid: string;
-    groupId: string;
-    userId: string;
+    name: string;
+    lastname: string;
+    email: string;
+    voiceprint: string;
   }
   
   export interface Credential {
@@ -22,9 +23,9 @@ export interface CreateCredentialPayload {
   export interface CredentialSubject {
     id: string;
     name: string;
-    gender: string;
-    groupID?: string;
-    userID?: string;
+    lastname: string;
+    email: string;
+    voiceprint: string;
   }
   
   export interface CredentialStatus {

@@ -16,11 +16,13 @@ export class CredentialService {
   async createCredential(payload: CreateCredentialPayload): Promise<Credential | undefined> {
     try {
       const { data } = await this.cheqdApi.post<Credential>('/credential/issue', {
-        issuerDid: payload.issuerDid,
+        issuerDid: process.env.CHEQD_DID,
         subjectDid: `did:key:${payload.subjectDid}`,
         attributes: {
-          groupID: payload.groupId,
-          userID: payload.userId,
+            name: payload.name,
+            lastname: payload.lastname,
+            email: payload.email,
+            voiceprint: payload.voiceprint,
         },
         type: ['Join'],
         format: 'jwt',
@@ -31,7 +33,7 @@ export class CredentialService {
         },
       });
 
-      this.logger.log(`✅ Credential issued for user ${payload.userId}`);
+      this.logger.log(`✅ Credential issued for user ${payload.name}`);
       return data;
     } catch (error: any) {
       if (error.response) {
