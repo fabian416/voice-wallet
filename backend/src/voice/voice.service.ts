@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 const execFileAsync = promisify(execFile);
 
 @Injectable()
-export class VoiceService {/*
+export class VoiceService {
   // Receive a file form the frontend (buffer) and then process it 
   async generateEmbeddingBase64(file: Express.Multer.File): Promise<string> {
     // Save temporary the auido
@@ -42,5 +42,5 @@ export class VoiceService {/*
     }
 
     return Math.sqrt(sum);
-  }*/
+  }
 }

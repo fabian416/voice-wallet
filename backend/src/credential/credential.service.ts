@@ -17,7 +17,7 @@ export class CredentialService {
   async createCredential(payload: CreateCredentialPayloadDto): Promise<CredentialDto | undefined> {
     try {
       const { data } = await this.cheqdApi.post<CredentialDto>('/credential/issue', {
-        issuerDid: process.env.CHEQD_DID,
+        issuerDid: process.env.CHEQD_ISSUER_DID,
         subjectDid: `did:key:${payload.subjectDid}`,
         attributes: {
             name: payload.name,

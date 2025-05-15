@@ -15,7 +15,7 @@ export class DidService {
   });
 
   private readonly network = process.env.CHEQD_NETWORK;
-  private readonly publicKeyHex = process.env.CHEQD_PUBLIC_KEY;
+  private readonly publicKeyHex = process.env.CHEQD_ISSUER_PUBLIC_KEY;
 
   async createDIDDoc(): Promise<CreateDIDDocResponseDto | undefined> {
     try {
