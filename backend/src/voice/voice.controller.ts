@@ -3,7 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { VoiceService } from './voice.service';
 
 @Controller('voice')
-export class VoiceController {
+export class VoiceController {/*
   constructor(private readonly voiceService: VoiceService) {}
 
   @Post('register')
@@ -27,5 +27,5 @@ export class VoiceController {
       distance,
       match: distance < 0.675,
     };
-  }
+  }*/
 }

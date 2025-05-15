@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { DidService } from './did.service';
-import type { DidDoc } from './did.types';
+import type { DidDocDto } from './dto/create-did-doc-response.dto';
 
 @Controller('did')
 export class DidController {
@@ -12,7 +12,7 @@ export class DidController {
   }
 
   @Post('create')
-  createDID(@Body() didDoc: DidDoc) {
+  createDID(@Body() didDoc: DidDocDto) {
     return this.didService.createDID(didDoc);
   }
 }

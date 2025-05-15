@@ -10,6 +10,8 @@ import { DidController } from './did/did.controller';
 import { CredentialService } from './credential/credential.service';
 import { CredentialController } from './credential/credential.controller';
 import { ConfigModule } from '@nestjs/config';
+import { DidLinkedResourceService } from './did-linked-resource/did-linked-resource.service';
+import { DidLinkedResourceController } from './did-linked-resource/did-linked-resource.controller';
 
 @Module({
   imports: [
@@ -17,8 +19,8 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
     }),
   ],
-  controllers: [AppController, AccountController, KeyController, DidController, CredentialController],
-  providers: [AppService, AccountService, KeyService, DidService, CredentialService],
+  controllers: [AppController, AccountController, KeyController, DidController, CredentialController, DidLinkedResourceController],
+  providers: [AppService, AccountService, KeyService, DidService, CredentialService, DidLinkedResourceService],
 })
 
 export class AppModule {}

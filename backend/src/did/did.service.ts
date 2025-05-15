@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
-import type { CreateDIDDocResponse, DidDoc } from './did.types';
+import type { CreateDIDDocResponseDto, DidDocDto } from './dto/create-did-doc-response.dto';
+
 
 @Injectable()
 export class DidService {
@@ -16,10 +17,10 @@ export class DidService {
   private readonly network = process.env.CHEQD_NETWORK;
   private readonly publicKeyHex = process.env.CHEQD_PUBLIC_KEY;
 
-  async createDIDDoc(): Promise<CreateDIDDocResponse | undefined> {
+  async createDIDDoc(): Promise<CreateDIDDocResponseDto | undefined> {
     try {
       const url = `https://did-registrar.cheqd.net/1.0/did-document?verificationMethod=Ed25519VerificationKey2020&methodSpecificIdAlgo=uuid&network=${this.network}&publicKeyHex=${this.publicKeyHex}`;
-      const { data } = await axios.get<CreateDIDDocResponse>(url);
+      const { data } = await axios.get<CreateDIDDocResponseDto>(url);
       this.logger.log(`✅ DID Document template fetched`);
       return data;
     } catch (error: any) {
@@ -27,7 +28,7 @@ export class DidService {
     }
   }
 
-  async createDID(didDoc: DidDoc): Promise<string | undefined> {
+  async createDID(didDoc: DidDocDto): Promise<string | undefined> {
     try {
       const { data } = await this.cheqdApi.post<{ did: string }>('/did/create', {
         network: this.network,

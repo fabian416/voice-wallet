@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
-import type { CreateCredentialPayload, Credential } from './credential.types';
+import type { CreateCredentialPayloadDto } from './dto/create-credential-payload.dto';
+import type { CredentialDto } from './dto/credential.dto';
 
 @Injectable()
 export class CredentialService {
@@ -13,9 +14,9 @@ export class CredentialService {
     },
   });
 
-  async createCredential(payload: CreateCredentialPayload): Promise<Credential | undefined> {
+  async createCredential(payload: CreateCredentialPayloadDto): Promise<CredentialDto | undefined> {
     try {
-      const { data } = await this.cheqdApi.post<Credential>('/credential/issue', {
+      const { data } = await this.cheqdApi.post<CredentialDto>('/credential/issue', {
         issuerDid: process.env.CHEQD_DID,
         subjectDid: `did:key:${payload.subjectDid}`,
         attributes: {
