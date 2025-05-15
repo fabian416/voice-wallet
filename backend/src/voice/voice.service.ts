@@ -2,20 +2,30 @@ import { Injectable } from '@nestjs/common';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import * as path from 'path';
+import * as fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 
 const execFileAsync = promisify(execFile);
 
 @Injectable()
 export class VoiceService {
-  async generateEmbeddingBase64(audioPath: string): Promise<string> {
-    const scriptPath = path.resolve(__dirname, '../../../scripts/generate_embedding.py');
+  // Receive a file form the frontend (buffer) and then process it 
+  async generateEmbeddingBase64(file: Express.Multer.File): Promise<string> {
+    // Save temporary the auido
+    const tmpPath = path.resolve(__dirname, `../../../tmp/${uuidv4()}.wav`);
+    fs.writeFileSync(tmpPath, file.buffer);
+
+    const scriptPath = path.resolve(__dirname, '../../../scripts/voice_embedding/generate_embedding.py');
 
     try {
-      const { stdout } = await execFileAsync('python3', [scriptPath, audioPath]);
-      return stdout.trim(); // This will be the string base64
+      const { stdout } = await execFileAsync('python3', [scriptPath, tmpPath]);
+      return stdout.trim();
     } catch (error) {
       console.error('Error generating voice embedding:', error);
       throw new Error('Voice embedding failed');
+    } finally {
+      // Alwas remove the temporary file even if it fails
+      fs.unlinkSync(tmpPath);
     }
   }
 
