@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Mic, MicOff } from 'lucide-react';
-import { Button } from './ui/button';
-import { Card } from './ui/card';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 export const VoiceInterface = () => {
   const [isListening, setIsListening] = useState(false);

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from 'next/router'
 
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger } from "@/app/components/ui/sheet"
 
 // Configuration constants
 const DEFAULT_SCOPES: string[] = [
