@@ -17,4 +17,4 @@ embedding = np.frombuffer(embedding_bytes, dtype=np.float32)
 
 # Verify form and values of the array
 print(f"Embedding shape: {embedding.shape}")
-print(f"Primeros 5 valores: {embedding[:5]}")
+print(f"First 5 values: {embedding[:5]}")
