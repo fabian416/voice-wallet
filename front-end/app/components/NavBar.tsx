@@ -54,6 +54,7 @@ export default function Navbar() {
       const token = currentUrl.searchParams.get("auth_token")
       if (token) {
         setAuthToken(token)
+        console.log("token", token)
         // You might want to store this token in localStorage or your app's state management
         localStorage.setItem('veridaAuthToken', token)
       }
