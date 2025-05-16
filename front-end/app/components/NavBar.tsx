@@ -123,9 +123,12 @@ export default function Navbar() {
         {/* Right section: Verida button */}
         <div className="hidden lg:flex items-center gap-3">
           {!authToken ? (
-            <Button onClick={handleConnect} className="flex items-center gap-2">
-              Connect with Verida
-            </Button>
+            <Button
+            onClick={handleConnect}
+            className="flex items-center gap-2 bg-white text-black border border-gray-300 hover:bg-gray-100"
+          >
+            Connect with Verida
+          </Button>
           ) : (
             <Button variant="outline">Connected</Button>
           )}
