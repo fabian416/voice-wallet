@@ -11,6 +11,7 @@ import { Tool } from '@langchain/core/tools';
 @Injectable()
 export class AgentService {
     private agent: any;
+    private llm: any;
     private agentTools: Tool[];
 
     constructor(
@@ -18,50 +19,38 @@ export class AgentService {
     ) {}
     
     async onModuleInit() {
-        this.agent = await this.initializeAgent();
+        // Initialize LLM
+        const llm = new ChatOpenAI({
+            model: "gpt-4o-mini",
+            apiKey: process.env.OPENAI_API_KEY,
+            temperature: 0,
+        });            
+        this.llm = llm;
     }
 
-    /**
-     * Initialize the agent with Verida PersonalAgentkit
-     *
-     * @returns Agent executor and config
-     */
-    private async initializeAgent() {
-        try {
-            // Initialize LLM
-            const llm = new ChatOpenAI({
-                model: "gpt-4o-mini",
-                apiKey: process.env.OPENAI_API_KEY,
-                temperature: 0,
-            });            
-             
-            // VERIDA AI
-            /**
-            const personalAgentkit = await PersonalAgentKit.from(<PersonalAgentKitOptions>{
-                veridaApiKey: process.env.VERIDA_API_KEY,
-                veridaApiEndpoint: process.env.VERIDA_API_ENDPOINT || undefined,
-            });
+    async buildAgent(veridaAuthToken?: string) {
+        let agentTools = [new TavilySearchResults({ maxResults: 3 })]
 
-             * 
+        // VERIDA AI
+        /**
+            if (veridaAuthToken) {
+                const personalAgentkit = await PersonalAgentKit.from(<PersonalAgentKitOptions>{
+                    veridaApiKey: process.env.VERIDA_API_KEY,
+                    veridaApiEndpoint: process.env.VERIDA_API_ENDPOINT || undefined,
+                });
+                
+                const tools = await getLangChainTools(personalAgentkit);
+            }
+
+            agentTools = [...agentTools, ...tools];
+        */
+
             
-            const tools = await getLangChainTools(personalAgentkit);
-            */
-            
-            //const prompt = await pull<PromptTemplate>("hwchase17/react");
-
-            this.agentTools = [new TavilySearchResults({ maxResults: 3 })]
-
-            // Create React Agent using the LLM and Verida PersonalAgentKit tools
-            const agent = await createReactAgent({
-                llm,
-                tools: this.agentTools,
-            });
-
-            return agent 
-        } catch (error) {
-            console.error("Failed to initialize agent:", error);
-            throw error;
-        }
+        const agent = await createReactAgent({
+            llm: this.llm,
+            tools: agentTools,
+        });
+        return agent;
     }
 
     async formatMessage(conversation: Conversation) {
@@ -90,19 +79,23 @@ export class AgentService {
      * @param conversationId - The ID of the conversation
      * @returns The assistant response
      */
-    async callAgent(message: string, conversationId: string) {
+    async callAgent(message: string, conversationId: string, veridaAuthToken?: string) {
         // Fetching conversation and messages from database
         const conversation = await this.chatService.getOrCreateConversation(conversationId);
         const formattedMessages = await this.formatMessage(conversation);
         
         await this.chatService.storeMessage(conversation.id, message, "user");
         
-        const finalState = await this.agent.invoke({ 
+        const agent = await this.buildAgent(veridaAuthToken);
+
+        const finalState = await agent.invoke({ 
             messages: [...formattedMessages, new HumanMessage(message)]
         });
+
+
         
         // Storing and returning assistant response
-        const assistantResponse = finalState.messages[finalState.messages.length - 1].content;
+        const assistantResponse = finalState.messages[finalState.messages.length - 1].content.toString();
         await this.chatService.storeMessage(conversation.id, assistantResponse, "assistant");
         return assistantResponse;
     }

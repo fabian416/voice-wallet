@@ -13,8 +13,10 @@ export async function createNewChat(): Promise<string> {
 }
 
 export async function sendMessage(conversationId: string, message: string): Promise<string> {
+  const token = localStorage.getItem('veridaAuthToken');
   const response = await axiosBase.post(`/agent/chat/${conversationId}`, {
     message,
+    veridaAuthToken: token,
   });
   return response.data;
 } 

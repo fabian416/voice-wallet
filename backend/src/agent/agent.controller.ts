@@ -15,8 +15,8 @@ export class AgentController {
     @Post('chat/:id')
     async getAgent( @Body() body: UserMessage, @Param('id', ParseUUIDPipe) id: UUID
     ) {
-      console.log(body);
-      return await this.agentService.callAgent(body.message, id);
+      const {message, veridaAuthToken} = body;
+      return await this.agentService.callAgent(message, id, veridaAuthToken);
     }
   
     @Post('new_chat')
