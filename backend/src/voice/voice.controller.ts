@@ -19,14 +19,28 @@ export class VoiceController {
   @UseInterceptors(FileInterceptor('audio'))
   async verify(
     @UploadedFile() file: Express.Multer.File,
-    @Body('reference') reference: string // embedding registered previously
+    @Body('reference') reference: string
   ) {
-    const voiceprint = await this.voiceService.generateEmbeddingBase64(file);
+    // 🧠 Lanzamos ambas tareas en paralelo
+    const embeddingPromise = this.voiceService.generateEmbeddingBase64(file);
+    const transcriptionPromise = this.voiceService.transcribeAudio(file);
+  
+    // ⏳ Esperamos el embedding y comparamos
+    const voiceprint = await embeddingPromise;
     const distance = await this.voiceService.compareEmbeddings(voiceprint, reference);
-
+    const match = distance < 0.675;
+  
+    // 📝 Si hay match, esperamos la transcripción (ya en proceso)
+    let transcription: string | undefined = undefined;
+    if (match) {
+      transcription = await transcriptionPromise;
+    }
+  
     return {
       distance,
-      match: distance < 0.675,
+      match,
+      transcription,
     };
   }
+  
 }

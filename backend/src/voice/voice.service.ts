@@ -4,6 +4,9 @@ import { promisify } from 'util';
 import * as path from 'path';
 import * as fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+import { writeFile, readFile, unlink } from 'fs/promises';
+import { execa } from 'execa';
+import * as os from 'os';
 
 const execFileAsync = promisify(execFile);
 
@@ -68,4 +71,51 @@ export class VoiceService {
 
     return Math.sqrt(sum);
   }
+
+  async transcribeAudio(file: Express.Multer.File): Promise<string> {
+    const tmpDir = path.resolve(__dirname, '../../../backend/tmp');
+    if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
+
+    const inputPath = path.join(tmpDir, `${uuidv4()}.webm`);
+    const wavPath = path.join(tmpDir, `${uuidv4()}.wav`);
+    const txtPath = wavPath.replace(/\.wav$/, '.txt');
+
+    await writeFile(inputPath, file.buffer);
+
+    try {
+      // Convertir a .wav
+      await execa('ffmpeg', [
+        '-y',
+        '-i', inputPath,
+        '-acodec', 'pcm_s16le',
+        '-ac', '1',
+        '-ar', '16000',
+        wavPath
+      ]);
+
+
+      const whisperPath = path.join(process.cwd(), 'voice-embedding', '.venv', 'bin', 'whisper');
+      await execa(whisperPath, [
+        wavPath,
+        '--model', 'base',
+        '--output_format', 'txt',
+        '--output_dir', tmpDir,
+      ]);
+      
+
+      const transcript = await readFile(txtPath, 'utf-8');
+      return transcript.trim();
+
+    } catch (error) {
+      console.error('Error transcribing audio:', error);
+      throw new Error('Transcription failed');
+    } finally {
+      // Limpieza
+      const cleanup = [inputPath, wavPath, txtPath];
+      for (const filePath of cleanup) {
+        if (fs.existsSync(filePath)) await unlink(filePath);
+      }
+    }
+  }
+  
 }
