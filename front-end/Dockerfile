@@ -17,7 +17,7 @@ COPY . .
 
 # Variables de entorno
 ARG NEXT_PUBLIC_BACKEND_URI
-ENV NEXT_PUBLIC_BACKEND_URI=http://backend:5000
+ENV NEXT_PUBLIC_BACKEND_URI=https://api.wally.aichallenge.fun
 
 # Build del frontend
 RUN pnpm build
@@ -43,4 +43,4 @@ COPY --from=builder /app/next.config.js ./next.config.js
 
 EXPOSE 3001
 
-CMD ["pnpm", "start"]
+CMD ["pnpm", "start", "--port", "3001"]

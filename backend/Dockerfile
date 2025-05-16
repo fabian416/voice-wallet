@@ -26,6 +26,6 @@ RUN python3 -m venv voice-embedding/.venv && \
 
 RUN yarn build
 
-EXPOSE 3000
+EXPOSE 5001
 
 CMD ["node", "dist/main"]
