@@ -54,7 +54,6 @@ export class CredentialService {
 
 
   async verifyCredential(jwt: string): Promise<any> {
-    console.log({jwt});
     try {
       const { data } = await this.cheqdApi.post('/credential/verify', {
         credential: jwt,

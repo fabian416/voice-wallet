@@ -70,7 +70,7 @@ export default function Navbar() {
   
     return () => clearInterval(interval);
   }, []);
-  
+
   const handleConnect = () => {
     window.location.href = buildConnectUrl()
   }
@@ -93,7 +93,9 @@ export default function Navbar() {
               width={40}
               height={40}
             />
-            <span className="text-xl font-bold text-white">Wally</span>
+            <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 text-transparent bg-clip-text">
+              Wally
+            </span>
           </Link>
 
           {/* Nav links */}

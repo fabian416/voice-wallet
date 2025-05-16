@@ -46,8 +46,7 @@ export default function CreateAccountPage() {
             body: JSON.stringify({ voiceprint }),
             });
 
-            const {ipfsUrl, did, linkedResource, credential} = await res.json();
-            localStorage.setItem('ipfsUrl', ipfsUrl);
+            const {did, linkedResource, credential} = await res.json();
             localStorage.setItem('did', did);
             localStorage.setItem('linkedResource', linkedResource);
             localStorage.setItem('credential', JSON.stringify(credential));

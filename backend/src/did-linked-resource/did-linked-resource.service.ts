@@ -29,7 +29,7 @@ export class DidLinkedResourceService {
         },
       });
 
-      this.logger.log(`✅ Resource created: ${response.data.resource?.resourceId}`);
+      this.logger.log(`✅ Did-Linked Resource created: ${response.data.resource?.resourceId}`);
       return response.data;
     } catch (error: any) {
       this.logger.error('❌ Error creating resource:', error.response?.data || error.message);
