@@ -1,24 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AccountController } from './account/account.controller';
-import { AccountService } from './account/account.service';
-import { KeyController } from './key/key.controller';
-import { KeyService } from './key/key.service';
-import { DidService } from './did/did.service';
-import { DidController } from './did/did.controller';
-import { CredentialService } from './credential/credential.service';
-import { CredentialController } from './credential/credential.controller';
 import { ConfigModule } from '@nestjs/config';
-import { DidLinkedResourceService } from './did-linked-resource/did-linked-resource.service';
-import { DidLinkedResourceController } from './did-linked-resource/did-linked-resource.controller';
-import { CredentialModule } from './credential/credential.module';
-import { AgentModule } from './agent/agent.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { VoiceController } from './voice/voice.controller';
-import { VoiceService } from './voice/voice.service';
-import { IpfsService } from './ipfs/ipfs.service';
 import { AccountEntity } from './account/entities/account.entity';
+import { AccountModule } from './account/account.module';
+import { IpfsModule } from './ipfs/ipfs.module';
+import { KeyModule } from './key/key.module';
+import { DidModule } from './did/did.module';
+import { DidLinkedResourceModule } from './did-linked-resource/did-linked-resource.module';
+import { CredentialModule } from './credential/credential.module';
+import { VoiceModule } from './voice/voice.module'; 
+import { AgentModule } from './agent/agent.module';
 
 @Module({
   imports: [
@@ -31,11 +24,17 @@ import { AccountEntity } from './account/entities/account.entity';
       synchronize: true,
       entities: [AccountEntity],
     }),
+    AccountModule,
+    IpfsModule,
+    KeyModule,
+    DidModule,
+    DidLinkedResourceModule,
     CredentialModule,
-    AgentModule
+    VoiceModule,
+    AgentModule,
   ],
-  controllers: [AppController, VoiceController, AccountController, KeyController, DidController, CredentialController, DidLinkedResourceController],
-  providers: [AppService, VoiceService, AccountService, IpfsService, KeyService, DidService, CredentialService, DidLinkedResourceService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 
 export class AppModule {}

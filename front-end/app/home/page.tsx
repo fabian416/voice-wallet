@@ -20,14 +20,14 @@ export default function HomePage() {
 
   if (!credential) {
     return (
-      <div className="min-h-[calc(100vh-3.3rem)] flex items-center justify-center h-screen bg-gray-900 text-white">
+      <div className="min-h-[calc(100vh-3.3rem)] flex items-center justify-center bg-gray-900 text-white">
         <p className="text-lg">Redirecting...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-[calc(100vh-3.3rem)] flex flex-col items-center justify-center h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800 text-white px-4">
+    <div className="min-h-[calc(100vh-3.3rem)] flex flex-col items-center justify-center bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800 text-white px-4">
       <h1 className="text-4xl font-bold text-green-400 mb-6 text-center">
         🎉 Congratulations!
       </h1>

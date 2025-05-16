@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Wally',
-  description: 'Wally is voice-controlled AI',
+  description: 'Wally is an AI assistant that recognizes and protects your identity using your unique voiceprint.',
   icons: {
     icon: [
       { url: "/favicon.ico", type: "image/x-icon" },

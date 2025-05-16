@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { Chat, Message } from './types/chatTypes';
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URI || 'http://localhost:5000';
 
 const axiosBase = axios.create({
   baseURL: API_BASE_URL,
