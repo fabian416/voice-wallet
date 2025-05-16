@@ -15,6 +15,10 @@ import { DidLinkedResourceController } from './did-linked-resource/did-linked-re
 import { CredentialModule } from './credential/credential.module';
 import { AgentModule } from './agent/agent.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { VoiceController } from './voice/voice.controller';
+import { VoiceService } from './voice/voice.service';
+import { IpfsService } from './ipfs/ipfs.service';
+import { AccountEntity } from './account/entities/account.entity';
 
 @Module({
   imports: [
@@ -25,12 +29,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       type: 'sqlite',
       database: 'database.sqlite',
       synchronize: true,
+      entities: [AccountEntity],
     }),
     CredentialModule,
     AgentModule
   ],
-  controllers: [AppController, AccountController, KeyController, DidController, CredentialController, DidLinkedResourceController],
-  providers: [AppService, AccountService, KeyService, DidService, CredentialService, DidLinkedResourceService],
+  controllers: [AppController, VoiceController, AccountController, KeyController, DidController, CredentialController, DidLinkedResourceController],
+  providers: [AppService, VoiceService, AccountService, IpfsService, KeyService, DidService, CredentialService, DidLinkedResourceService],
 })
 
 export class AppModule {}

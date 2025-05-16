@@ -11,15 +11,6 @@ export class CredentialSubjectDto {
   id: string;
 
   @IsString()
-  name: string;
-
-  @IsString()
-  lastname: string;
-
-  @IsString()
-  email: string;
-
-  @IsString()
   voiceprint: string;
 }
 

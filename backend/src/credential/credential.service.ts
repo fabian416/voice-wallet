@@ -17,13 +17,16 @@ export class CredentialService {
   async createCredential(payload: CreateCredentialPayloadDto): Promise<CredentialDto | undefined> {
     try {
       const { data } = await this.cheqdApi.post<CredentialDto>('/credential/issue', {
-        issuerDid: process.env.CHEQD_ISSUER_DID,
+        issuerDid: payload.signer,
         subjectDid: `did:key:${payload.subjectDid}`,
         attributes: {
-            name: payload.name,
-            lastname: payload.lastname,
-            email: payload.email,
-            voiceprint: payload.voiceprint,
+          voiceprint: {
+            type: payload.voiceprint.resourceType,
+            path: payload.voiceprint.voiceResourceURI,
+            name: payload.voiceprint.resourceName,
+            version: payload.voiceprint.resourceVersion,
+            mediaType: payload.voiceprint.mediaType
+          }  
         },
         type: ['Join'],
         format: 'jwt',
@@ -34,7 +37,7 @@ export class CredentialService {
         },
       });
 
-      this.logger.log(`✅ Credential issued for user ${payload.name}`);
+      this.logger.log(`✅ Credential issued for user ${payload.subjectDid}`);
       return data;
     } catch (error: any) {
       if (error.response) {
@@ -45,6 +48,7 @@ export class CredentialService {
       } else {
         this.logger.error(`❌ createCredential: Axios config error: ${error.message}`);
       }
+      throw error;
     }
   }
 

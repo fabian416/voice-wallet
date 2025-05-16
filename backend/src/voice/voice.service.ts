@@ -11,24 +11,49 @@ const execFileAsync = promisify(execFile);
 export class VoiceService {
   // Receive a file form the frontend (buffer) and then process it 
   async generateEmbeddingBase64(file: Express.Multer.File): Promise<string> {
-    // Save temporary the auido
-    const tmpPath = path.resolve(__dirname, `../../../tmp/${uuidv4()}.wav`);
-    fs.writeFileSync(tmpPath, file.buffer);
+    if (!file.buffer || file.buffer.length === 0) {
+      throw new Error('Uploaded file is empty');
+    }
 
-    const scriptPath = path.resolve(__dirname, '../../../scripts/voice_embedding/generate_embedding.py');
-
+    const tmpDir = path.resolve(__dirname, '../../../backend/tmp');
+    if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
+  
+    // Guardar temporalmente el .webm
+    const inputPath = path.join(tmpDir, `${uuidv4()}.webm`);
+    const wavPath = path.join(tmpDir, `${uuidv4()}.wav`);
+    fs.writeFileSync(inputPath, file.buffer);
+  
     try {
-      const { stdout } = await execFileAsync('python3', [scriptPath, tmpPath]);
-      return stdout.trim();
+      // 🔁 Convertir .webm a .wav (formato requerido por resemblyzer)
+      await execFileAsync('ffmpeg', [
+        '-y', // overwrite
+        '-i', inputPath,
+        '-acodec', 'pcm_s16le',
+        '-ac', '1',        // mono
+        '-ar', '16000',    // 16kHz
+        wavPath
+      ]);
+  
+      // 🧠 Ejecutar el script Python con el .wav convertido
+      const scriptPath = path.join(process.cwd(), 'voice-embedding', 'scripts', 'generate_embedding.py');
+      const { stdout } = await execFileAsync('python3', [scriptPath, wavPath]);
+
+      const voiceprint = stdout
+        .split('\n')
+        .filter((line) => line.trim() !== '')
+        .pop()!;
+      
+      return voiceprint
     } catch (error) {
       console.error('Error generating voice embedding:', error);
       throw new Error('Voice embedding failed');
     } finally {
-      // Alwas remove the temporary file even if it fails
-      fs.unlinkSync(tmpPath);
+      // 🧹 Limpieza total
+      if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
+      if (fs.existsSync(wavPath)) fs.unlinkSync(wavPath);
     }
   }
-
+  
   async compareEmbeddings(base64A: string, base64B: string): Promise<number> {
     const a = Buffer.from(base64A, 'base64');
     const b = Buffer.from(base64B, 'base64');

@@ -6,12 +6,13 @@ import { VoiceService } from './voice.service';
 export class VoiceController {
   constructor(private readonly voiceService: VoiceService) {}
 
-  @Post('register')
+  @Post('create-voiceprint')
   @UseInterceptors(FileInterceptor('audio'))
   async register(@UploadedFile() file: Express.Multer.File) {
-    const embedding = await this.voiceService.generateEmbeddingBase64(file);
+    const voiceprint = await this.voiceService.generateEmbeddingBase64(file);
+    console.log(voiceprint);
     // Here we can save it or emit in a Verify credential
-    return { embedding };
+    return { voiceprint };
   }
 
   @Post('verify')
@@ -20,8 +21,8 @@ export class VoiceController {
     @UploadedFile() file: Express.Multer.File,
     @Body('reference') reference: string // embedding registered previously
   ) {
-    const current = await this.voiceService.generateEmbeddingBase64(file);
-    const distance = await this.voiceService.compareEmbeddings(current, reference);
+    const voiceprint = await this.voiceService.generateEmbeddingBase64(file);
+    const distance = await this.voiceService.compareEmbeddings(voiceprint, reference);
 
     return {
       distance,

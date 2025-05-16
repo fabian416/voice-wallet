@@ -14,12 +14,11 @@ export class DidService {
     },
   });
 
-  private readonly network = process.env.CHEQD_NETWORK;
-  private readonly publicKeyHex = process.env.CHEQD_ISSUER_PUBLIC_KEY;
+  private readonly network = process.env.CHEQD_NETWORK!;
 
-  async createDIDDoc(): Promise<CreateDIDDocResponseDto | undefined> {
+  async createDIDDoc(publicKeyHex: string = process.env.CHEQD_ISSUER_PUBLIC_KEY!): Promise<CreateDIDDocResponseDto | undefined> {
     try {
-      const url = `https://did-registrar.cheqd.net/1.0/did-document?verificationMethod=Ed25519VerificationKey2020&methodSpecificIdAlgo=uuid&network=${this.network}&publicKeyHex=${this.publicKeyHex}`;
+      const url = `https://did-registrar.cheqd.net/1.0/did-document?verificationMethod=Ed25519VerificationKey2020&methodSpecificIdAlgo=uuid&network=${this.network}&publicKeyHex=${publicKeyHex}`;
       const { data } = await axios.get<CreateDIDDocResponseDto>(url);
       this.logger.log(`✅ DID Document template fetched`);
       return data;
@@ -28,13 +27,13 @@ export class DidService {
     }
   }
 
-  async createDID(didDoc: DidDocDto): Promise<string | undefined> {
+  async createDID(didDoc: DidDocDto, publicKeyHex: string = process.env.CHEQD_ISSUER_PUBLIC_KEY!): Promise<string | undefined> {
     try {
       const { data } = await this.cheqdApi.post<{ did: string }>('/did/create', {
         network: this.network,
         identifierFormatType: 'uuid',
         options: {
-          key: this.publicKeyHex,
+          key: publicKeyHex,
           verificationMethodType: 'Ed25519VerificationKey2018',
         },
         didDocument: didDoc,

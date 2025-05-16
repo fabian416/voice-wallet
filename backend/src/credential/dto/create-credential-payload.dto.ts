@@ -1,18 +1,32 @@
-import { IsString } from 'class-validator';
+import { IsString, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class VoiceprintDto {
+  @IsString()
+  resourceType: string;
+
+  @IsString()
+  voiceResourceURI: string;
+
+  @IsString()
+  resourceName: string;
+
+  @IsString()
+  resourceVersion: string;
+
+  @IsString()
+  mediaType: string;
+}
+
 
 export class CreateCredentialPayloadDto {
   @IsString()
+  signer: string;
+
+  @IsString()
   subjectDid: string;
 
-  @IsString()
-  name: string;
-
-  @IsString()
-  lastname: string;
-
-  @IsString()
-  email: string;
-
-  @IsString()
-  voiceprint: string;
+  @ValidateNested()
+  @Type(() => VoiceprintDto)
+  voiceprint: VoiceprintDto;
 }
