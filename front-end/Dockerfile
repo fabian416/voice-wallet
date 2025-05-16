@@ -43,4 +43,4 @@ COPY --from=builder /app/next.config.js ./next.config.js
 
 EXPOSE 3001
 
-CMD ["pnpm", "start", "--port", "3001"]
+CMD ["pnpm", "start", "--port", "3001", "--hostname", "0.0.0.0"]
