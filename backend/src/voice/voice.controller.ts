@@ -28,7 +28,7 @@ export class VoiceController {
     // ⏳ Esperamos el embedding y comparamos
     const voiceprint = await embeddingPromise;
     const distance = await this.voiceService.compareEmbeddings(voiceprint, reference);
-    const match = distance < 0.675;
+    const match = distance < 0.775;
   
     // 📝 Si hay match, esperamos la transcripción (ya en proceso)
     let transcription: string | undefined = undefined;
