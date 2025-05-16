@@ -73,19 +73,9 @@ export default function ChatSidebar({
                 />
               </svg>
             </div>
-            <h2 className="font-semibold text-lg bg-clip-text text-transparent bg-gradient-to-r from-[#a78bfa] to-[#60a5fa]">
-              Wally
-            </h2>
           </div>
           <Button variant="ghost" size="sm" className="md:hidden" onClick={onClose}>
             <X className="h-4 w-4" />
-          </Button>
-        </div>
-
-        <div className="p-2">
-          <Button onClick={onNewChat} className="w-full justify-start gap-2 bg-[#4f6ef7] hover:bg-[#3b5ef5] text-white">
-            <PlusCircle className="h-4 w-4" />
-            Nueva conversación
           </Button>
         </div>
 
@@ -114,7 +104,7 @@ export default function ChatSidebar({
                 </button>
               ))
             ) : (
-              <div className="text-center p-4 text-muted-foreground">No hay conversaciones</div>
+              <div className="text-center p-4 text-muted-foreground">No conversations found.</div>
             )}
           </div>
         </ScrollArea>

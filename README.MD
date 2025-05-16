@@ -6,10 +6,10 @@
 <h1 align="center">Wally 🤖🗣️</h1>
 
 <p align="center">
-    Wally is an AI assistant that creates a secure <strong>voiceprint</strong> linked to your <strong>identity</strong> through <strong>DID-Linked Resources</strong> — speak once, and prove it’s really you.
+    Wally is an AI assistant that creates a secure <strong>voiceprint</strong> linked to your <strong>identity</strong> through <strong>DID-Linked Resources</strong> — speak once, and access everything as yourself.
     <br />
     Powered by
-    <a href="https://cheqd.io" target="_blank" rel="noopener noreferrer">cheqd</a> &
+    <a href="https://cheqd.io" target="_blank" rel="noopener noreferrer">Cheqd</a> &
     <a href="https://www.verida.ai/" target="_blank" rel="noopener noreferrer">Verida</a>.
 
 </p>

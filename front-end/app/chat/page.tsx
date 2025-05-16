@@ -25,46 +25,33 @@ export default function VoiceChat() {
   const [chats, setChats] = useState<Chat[]>([
     {
       id: "1",
-      title: "Conversación sobre marketing",
+      title: "Conversation about marketing",
       messages: [
-        { id: "1-1", role: "user", content: "¿Cómo puedo mejorar mi estrategia de marketing?" },
+        { id: "1-1", role: "user", content: "How can I improve my marketing strategy?" },
         {
           id: "1-2",
           role: "assistant",
-          content: "Puedes comenzar analizando tu audiencia objetivo y creando contenido relevante para ellos.",
+          content: "You can start by analyzing your target audience and creating relevant content for them.",
         },
       ],
       lastUpdated: new Date(2023, 5, 15),
     },
     {
       id: "2",
-      title: "Ayuda con programación",
+      title: "Trip planning",
       messages: [
-        { id: "2-1", role: "user", content: "¿Cómo puedo optimizar mi código React?" },
+        { id: "2-1", role: "user", content: "What places should I visit in Barcelona?" },
         {
           id: "2-2",
           role: "assistant",
           content:
-            "Considera usar React.memo para componentes que se renderizan frecuentemente y evitar re-renderizados innecesarios.",
+            "Barcelona has many interesting places such as the Sagrada Familia, Park Güell, and the Gothic Quarter.",
         },
       ],
       lastUpdated: new Date(2023, 5, 10),
-    },
-    {
-      id: "3",
-      title: "Planificación de viaje",
-      messages: [
-        { id: "3-1", role: "user", content: "¿Qué lugares debo visitar en Barcelona?" },
-        {
-          id: "3-2",
-          role: "assistant",
-          content:
-            "Barcelona tiene muchos lugares interesantes como la Sagrada Familia, el Parque Güell y el Barrio Gótico.",
-        },
-      ],
-      lastUpdated: new Date(2023, 4, 28),
-    },
+    }
   ])
+  
 
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -133,7 +120,7 @@ export default function VoiceChat() {
                   {
                     id: Date.now().toString(),
                     role: "assistant",
-                    content: "Esta es una respuesta simulada. Conecta esto con tu backend para respuestas reales.",
+                    content: "I'm doing good and you?",
                   },
                 ],
                 lastUpdated: new Date(),
@@ -197,7 +184,7 @@ export default function VoiceChat() {
           </h1>
           <Button variant="ghost" size="sm" onClick={createNewChat} className="flex items-center gap-1">
             <PlusCircle className="h-4 w-4" />
-            <span className="hidden sm:inline">Nuevo Chat</span>
+            <span className="hidden sm:inline">New Chat</span>
           </Button>
         </header>
 
@@ -219,17 +206,17 @@ export default function VoiceChat() {
             <div className="flex-1 flex items-center justify-center">
               <Card className="p-8 bg-card/50 border border-border rounded-lg max-w-md mx-auto text-center shadow-lg">
                 <h2 className="text-xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#a78bfa] to-[#60a5fa]">
-                  Selecciona un chat para comenzar
+                  Select a chat to get started
                 </h2>
                 <p className="text-muted-foreground mb-6">
-                  Elige una conversación existente de la barra lateral o inicia una nueva conversación.
+                  Choose an existing conversation from the sidebar or start a new one.
                 </p>
                 <Button
                   onClick={createNewChat}
                   className="mx-auto flex items-center gap-2 bg-[#4f6ef7] hover:bg-[#3b5ef5] text-white"
                 >
                   <PlusCircle className="h-5 w-5" />
-                  Iniciar nueva conversación
+                  Start new conversation
                 </Button>
               </Card>
             </div>

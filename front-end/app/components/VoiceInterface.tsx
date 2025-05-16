@@ -111,7 +111,7 @@ export const VoiceInterface = () => {
             });
 
             const result = await response.json();
-            console.log({result});
+            
             if (response.ok) {
               localStorage.setItem('voiceprint', result.voiceprint);
               setStatusMessage("✅ Done.");

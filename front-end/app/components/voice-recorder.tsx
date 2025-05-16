@@ -28,7 +28,7 @@ export default function VoiceRecorder({ onNewMessage }: VoiceRecorderProps) {
       }
 
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" })
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" })
         processAudio(audioBlob)
       }
 
@@ -52,32 +52,57 @@ export default function VoiceRecorder({ onNewMessage }: VoiceRecorderProps) {
   }
 
   const processAudio = async (audioBlob: Blob) => {
-    setIsProcessing(true)
+    setIsProcessing(true);
+    setVerificationState("verifying");
+  
+    try {
+      const formData = new FormData();
+      formData.append("audio", audioBlob);
 
-    // Simulate voice verification (in a real app, you would send the audio to your API)
-    setTimeout(() => {
-      // Simulate successful verification 90% of the time
-      const isVerified = Math.random() > 0.1
-
-      setVerificationState(isVerified ? "verified" : "failed")
-
-      if (isVerified) {
-        // Simulate transcription (in a real app, you would get this from your API)
-        setTimeout(() => {
-          const simulatedTranscription = "Este es un mensaje de prueba transcrito del audio."
-          onNewMessage(simulatedTranscription, "user")
-          setIsProcessing(false)
-          setVerificationState("idle")
-        }, 1000)
-      } else {
-        setIsProcessing(false)
-        // Reset after a delay
-        setTimeout(() => {
-          setVerificationState("idle")
-        }, 3000)
+      const reference = localStorage.getItem("voiceprint") ?? "";
+      formData.append("reference", reference);
+  
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URI}/voice/verify`, {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        console.error("❌ Error verificando la voz:", response.statusText);
+        setVerificationState("failed");
+        setIsProcessing(false);
+        return;
       }
-    }, 2000)
-  }
+  
+      const result = await response.json(); // esperás { match: boolean, transcription?: string }
+      const { match, transcription } = result;
+  
+      if (match) {
+        setVerificationState("verified");
+  
+        // Mostrar transcripción si viene
+        setTimeout(() => {
+          const userText = transcription;
+          onNewMessage(userText, "user");
+          setVerificationState("idle");
+          setIsProcessing(false);
+        }, 1000);
+      } else {
+        setVerificationState("failed");
+        setIsProcessing(false);
+  
+        setTimeout(() => {
+          setVerificationState("idle");
+        }, 3000);
+      }
+  
+    } catch (err) {
+      console.error("❌ Error de red o inesperado:", err);
+      setVerificationState("failed");
+      setIsProcessing(false);
+      setTimeout(() => setVerificationState("idle"), 3000);
+    }
+  };
 
   // Iconos como componentes simples para evitar problemas de importación
   const MicIcon = () => (
