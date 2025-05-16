@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import VoiceRecorder from "@/components/ui/voice-recorder"
-import ChatMessage from "@/components/ui/chat-message"
-import ChatSidebar from "@/components/ui/chat-sidebar"
+import VoiceRecorder from "@/components/voice-recorder"
+import ChatMessage from "@/components/chat-message"
+import ChatSidebar from "@/components/chat-sidebar"
 import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -219,22 +219,23 @@ export default function VoiceChat() {
             <div className="flex-1 flex items-center justify-center">
               <Card className="p-8 bg-card/50 border border-border rounded-lg max-w-md mx-auto text-center shadow-lg">
                 <h2 className="text-xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#a78bfa] to-[#60a5fa]">
-                  Select a chat to get started
+                  Selecciona un chat para comenzar
                 </h2>
                 <p className="text-muted-foreground mb-6">
-                  Choose a new conversation from the sidebar or start a new one.
+                  Elige una conversación existente de la barra lateral o inicia una nueva conversación.
                 </p>
                 <Button
                   onClick={createNewChat}
                   className="mx-auto flex items-center gap-2 bg-[#4f6ef7] hover:bg-[#3b5ef5] text-white"
                 >
                   <PlusCircle className="h-5 w-5" />
-                  Start a new chat
+                  Iniciar nueva conversación
                 </Button>
               </Card>
             </div>
           )}
         </main>
+
         <footer className="p-2 text-center text-xs text-muted-foreground">© 2025 Wally. All rights reserved.</footer>
       </div>
     </div>

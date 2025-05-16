@@ -1,8 +1,6 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { MicOff, Loader2, CheckCircle2, AlertCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface VoiceRecorderProps {
@@ -81,59 +79,133 @@ export default function VoiceRecorder({ onNewMessage }: VoiceRecorderProps) {
     }, 2000)
   }
 
+  // Iconos como componentes simples para evitar problemas de importación
+  const MicIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+      <line x1="12" x2="12" y1="19" y2="22"></line>
+    </svg>
+  )
+
+  const MicOffIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="1" y1="1" x2="23" y2="23"></line>
+      <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V5a3 3 0 0 0-5.94-.6"></path>
+      <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2c0 .25-.01.5-.04.75"></path>
+      <line x1="12" y1="19" x2="12" y2="22"></line>
+    </svg>
+  )
+
+  const LoaderIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="animate-spin"
+    >
+      <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+    </svg>
+  )
+
+  const CheckCircleIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+  )
+
+  const AlertCircleIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+  )
+
   return (
     <div className="flex items-center space-x-4">
       <div className="relative">
-        <Button
+        {/* Botón simplificado sin usar el componente Button */}
+        <button
           onClick={isRecording ? stopRecording : startRecording}
-          variant="ghost"
-          size="lg"
+          disabled={isProcessing || verificationState === "verifying"}
           className={cn(
             "rounded-full w-16 h-16 flex items-center justify-center",
             isRecording
-              ? "bg-destructive hover:bg-destructive/90 text-destructive-foreground animate-pulse"
+              ? "bg-red-600 hover:bg-red-700 text-white animate-pulse"
               : "bg-[#4f6ef7] hover:bg-[#3b5ef5] text-white",
+            (isProcessing || verificationState === "verifying") && "opacity-70 cursor-not-allowed",
           )}
-          disabled={isProcessing || verificationState === "verifying"}
+          style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
         >
-          {isRecording ? (
-            <MicOff className="h-6 w-6" />
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-6 w-6"
-            >
-              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-              <line x1="12" x2="12" y1="19" y2="22"></line>
-            </svg>
-          )}
-        </Button>
+          <span className="flex items-center justify-center" style={{ width: "24px", height: "24px" }}>
+            {isRecording ? <MicOffIcon /> : <MicIcon />}
+          </span>
+        </button>
 
         {/* Voice verification indicator */}
         {verificationState !== "idle" && (
           <div className="absolute -top-1 -right-1">
             {verificationState === "verifying" && (
-              <div className="bg-yellow-500 text-white rounded-full p-1 animate-spin">
-                <Loader2 className="h-4 w-4" />
+              <div className="bg-yellow-500 text-white rounded-full p-1">
+                <LoaderIcon />
               </div>
             )}
             {verificationState === "verified" && (
               <div className="bg-green-500 text-white rounded-full p-1 animate-bounce">
-                <CheckCircle2 className="h-4 w-4" />
+                <CheckCircleIcon />
               </div>
             )}
             {verificationState === "failed" && (
-              <div className="bg-destructive text-destructive-foreground rounded-full p-1 animate-bounce">
-                <AlertCircle className="h-4 w-4" />
+              <div className="bg-red-500 text-white rounded-full p-1 animate-bounce">
+                <AlertCircleIcon />
               </div>
             )}
           </div>
@@ -143,12 +215,12 @@ export default function VoiceRecorder({ onNewMessage }: VoiceRecorderProps) {
       <div className="flex-1">
         {isRecording ? (
           <div className="flex items-center space-x-2">
-            <div className="text-sm font-medium">Grabando audio...</div>
+            <div className="text-sm font-medium">Recording audio...</div>
             <div className="flex space-x-1">
               {[...Array(3)].map((_, i) => (
                 <div
                   key={i}
-                  className="w-2 h-2 rounded-full bg-destructive"
+                  className="w-2 h-2 rounded-full bg-red-500"
                   style={{
                     animation: `bounce 1.4s infinite ease-in-out both`,
                     animationDelay: `${i * 0.16}s`,
@@ -158,15 +230,13 @@ export default function VoiceRecorder({ onNewMessage }: VoiceRecorderProps) {
             </div>
           </div>
         ) : verificationState === "verifying" ? (
-          <div className="text-sm font-medium text-yellow-400">Verificando tu voiceprint...</div>
+          <div className="text-sm font-medium text-yellow-400">Verifying your voiceprint...</div>
         ) : verificationState === "verified" ? (
-          <div className="text-sm font-medium text-green-400">Voiceprint verificado, procesando mensaje...</div>
+          <div className="text-sm font-medium text-green-400">Voiceprint verified, processing message...</div>
         ) : verificationState === "failed" ? (
-          <div className="text-sm font-medium text-destructive">
-            No se pudo verificar tu voiceprint. Intenta de nuevo.
-          </div>
+          <div className="text-sm font-medium text-red-400">Your voiceprint could not be verified. Try again</div>
         ) : (
-          <div className="text-sm text-muted-foreground">Presiona el botón para hablar</div>
+          <div className="text-sm text-muted-foreground">Press the button to speak</div>
         )}
       </div>
     </div>
