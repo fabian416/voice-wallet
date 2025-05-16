@@ -152,7 +152,7 @@ export default function VoiceChat() {
   }
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground dark">
+    <div className="flex min-h-[calc(100vh-7.3rem)] pt-16 bg-background text-foreground dark">
       {/* Sidebar */}
       <ChatSidebar
         chats={chats}
@@ -167,7 +167,7 @@ export default function VoiceChat() {
       />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-[calc(100vh-7.3rem)]">
         <header className="p-4 border-b border-border flex justify-between items-center">
           <Button
             variant="ghost"
@@ -235,8 +235,6 @@ export default function VoiceChat() {
             </div>
           )}
         </main>
-
-        <footer className="p-2 text-center text-xs text-muted-foreground">© 2025 Wally. All rights reserved.</footer>
       </div>
     </div>
   )

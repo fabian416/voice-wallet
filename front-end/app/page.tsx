@@ -13,7 +13,7 @@ export default function Home() {
         Wally
       </h1>
         <p className="text-xl text-gray-300 max-w-3xl">
-        Wally is an AI assistant that creates a secure <strong>voiceprint</strong> linked to your <strong>identity</strong> through <strong>DID-Linked Resources</strong> — speak once, and prove it’s really you.
+        Wally is an AI assistant that creates a secure <strong>voiceprint</strong> linked to your <strong>identity</strong> through <strong>DID-Linked Resources</strong> — speak once, and access everything as yourself.
         </p>
        
         <div className="w-full max-w-3xl">

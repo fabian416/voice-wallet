@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function clearIdentityStorage() {
-  const keysToRemove = ['credential', 'voiceprint', 'did', 'linkedResource'];
+  const keysToRemove = ['credential', 'voiceprint', 'did', 'linkedResource', 'veridaAuthToken'];
 
   keysToRemove.forEach((key) => {
     localStorage.removeItem(key);

@@ -72,7 +72,7 @@ export default function CredentialPage() {
 
 
   return (
-    <div className="min-h-screen pt-24 bg-gray-950 text-white flex flex-col items-center px-4">
+    <div className="min-h-[calc(100vh-3.3rem)] pt-24 bg-gray-950 text-white flex flex-col items-center px-4">
       <h1 className="text-2xl font-bold mb-2">This is your Credential</h1>
       <p className="mb-6">Your identity is now linked to your voice.</p>
 
