@@ -22,7 +22,7 @@ import { AgentModule } from './agent/agent.module';
       type: 'sqlite',
       database: 'database.sqlite',
       synchronize: true,
-      entities: [AccountEntity],
+      autoLoadEntities: true,
     }),
     AccountModule,
     IpfsModule,

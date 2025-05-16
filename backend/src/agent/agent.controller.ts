@@ -13,10 +13,9 @@ export class AgentController {
     ) {}
 
     @Post('chat/:id')
-    async getAgent(
-      @Body() body: UserMessage,
-      @Param('id', ParseUUIDPipe) id: UUID
+    async getAgent( @Body() body: UserMessage, @Param('id', ParseUUIDPipe) id: UUID
     ) {
+      console.log(body);
       return await this.agentService.callAgent(body.message, id);
     }
   
