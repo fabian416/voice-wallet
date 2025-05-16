@@ -21,16 +21,16 @@ export class VoiceController {
     @UploadedFile() file: Express.Multer.File,
     @Body('reference') reference: string
   ) {
-    // 🧠 Lanzamos ambas tareas en paralelo
+    // We launch both tasks in parallel
     const embeddingPromise = this.voiceService.generateEmbeddingBase64(file);
     const transcriptionPromise = this.voiceService.transcribeAudio(file);
   
-    // ⏳ Esperamos el embedding y comparamos
+    // We wait for the embedding and compare
     const voiceprint = await embeddingPromise;
     const distance = await this.voiceService.compareEmbeddings(voiceprint, reference);
-    const match = distance < 0.675;
+    const match = distance < 0.775;
   
-    // 📝 Si hay match, esperamos la transcripción (ya en proceso)
+    // If there is a match, we wait for the transcription
     let transcription: string | undefined = undefined;
     if (match) {
       transcription = await transcriptionPromise;
